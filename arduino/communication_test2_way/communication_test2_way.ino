@@ -16,6 +16,7 @@ void loop() {
     // say what you got:
     
     
+    
     if (incomingByte == send_left){
       Serial.print("I should: ");
       Serial.println("send_left");
@@ -30,5 +31,12 @@ void loop() {
       Serial.println(Serial.parseInt());
       Serial.println(Serial.parseInt());
       }
+    
+    Serial.print("recieved : ");
+    Serial.println(incomingByte);
+    
   }
+  //Serial.println("didn't recieve anything");
+  //delay(100);
+  //Serial.println(incomingByte); 
 }
