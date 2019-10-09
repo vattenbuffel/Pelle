@@ -14,14 +14,6 @@
 */
 
 //Move forward
-void move_forward(double speed_left, double speed_right){
-  analogWrite(left_engine.forwardPin, map(speed_left*1000, 0, 0.15*1000, 0, 255));
-  analogWrite(right_engine.forwardPin, map(speed_right*1000, 0, 0.15*1000, 0, 255));
-    
-}
-
-/*
-//Move forward
 void moveFor(double ref_speed_left, double ref_speed_right) {
   double cur_speed_left = 0;
   double cur_speed_right = 0;
@@ -88,7 +80,7 @@ void moveFor(double ref_speed_left, double ref_speed_right) {
   }
 }
 
-*/
+
 
 /*
   //Moves backward
