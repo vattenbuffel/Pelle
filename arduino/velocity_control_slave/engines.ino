@@ -1,17 +1,13 @@
 #include "engines.h"
-//Update/fix these
 
-/*
-  void turnRight(int speedLeft, int speedRight) {
-  analogWrite(vac->engine[leftEngine].forwardPin, map(speedLeft, 0, 100, 0, 255));
-  analogWrite(vac->engine[rightEngine].backwardPin, map(speedRight, 0, 100, 0, 255));
-  }
-
-  void turnLeft(int speedLeft, int speedRight) {
-  analogWrite(vac->engine[leftEngine].backwardPin, map(speedLeft, 0, 100, 0, 255));
-  analogWrite(vac->engine[rightEngine].forwardPin, map(speedRight, 0, 100, 0, 255));
-  }
-*/
+void actuate_left_vel(int vel){
+  if(vel > left_engine.v_max) vel = left_engine.v_max;
+  analogWrite(left_engine.forwardPin, map(vel, 0, left_engine.v_max, 0, 255));
+}
+void actuate_right_vel(int vel){
+  if(vel > right_engine.v_max) vel = right_engine.v_max;
+  analogWrite(right_engine.forwardPin, map(vel, 0, right_engine.v_max, 0, 255));
+}
 
 //Move forward
 void moveFor(double ref_speed_left, double ref_speed_right) {
@@ -21,6 +17,7 @@ void moveFor(double ref_speed_left, double ref_speed_right) {
   long t_cur = millis();
   int kp = 1;
   int ki = 1;
+   
   int kd = 0.5;
   double e_cur_left = 0;
   double e_cur_right = 0;
@@ -72,7 +69,7 @@ void moveFor(double ref_speed_left, double ref_speed_right) {
     t_old = t_cur;
     e_old_left = e_cur_left;
     e_old_right = e_cur_right;  
-    delayMillis(50);
+    delay(50);
     
     Serial.println(cur_speed_left);
     Serial.print(F("Sum error left: "));

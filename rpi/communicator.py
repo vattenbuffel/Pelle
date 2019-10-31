@@ -5,8 +5,7 @@ import time
 import queue
 
 
-
-class communicator:
+class Communicator:
     def __init__(self, name):
         GPIO.setmode(GPIO.BOARD)
         self.ser = serial.Serial(port="/dev/ttyUSB0",
@@ -49,7 +48,6 @@ class DataSender(threading.Thread):
         while True:
             data_to_send = self.data_to_send.get()
             self.ser_lock.acquire()
-            print(self.name, 'sends', data_to_send.encode())
             self.ser.write(data_to_send.encode())
             self.data_sent.set()
             self.ser_lock.release()
@@ -76,7 +74,6 @@ class DataReader(threading.Thread):
 
             while self.ser.in_waiting > 0:
                 data = self.ser.read(1)
-                print(self.name, 'received', data)
                 if data == b'\r':
                     self.received_data.put(read.decode("utf-8"))
                     self.ser.flushInput()
@@ -86,7 +83,4 @@ class DataReader(threading.Thread):
             self.ser_lock.release()
 
 
-t1 = communicator("t1")
 
-t1.send_request("3.4.5")
-print(t1.get_data())

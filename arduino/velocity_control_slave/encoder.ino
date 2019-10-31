@@ -18,3 +18,15 @@ void interruptFunLeft(){
 void interruptFunRight(){
   countRight++;
 }
+
+int report_left(){
+  int tmp = countLeft;
+  countLeft = 0;
+  return tmp;
+}
+
+int report_right(){
+  int tmp = countRight;
+  countRight = 0;
+  return tmp;
+}

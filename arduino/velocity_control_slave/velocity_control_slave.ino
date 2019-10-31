@@ -1,6 +1,6 @@
 #include "engines.h"
 #include "encoder.h"
-#include <MemoryFree.h>
+//#include <MemoryFree.h>
 #include <Wire.h> //needed?
 #include <math.h>
 
@@ -20,24 +20,14 @@ ENCODER right_encoder_b;
 void setup() {
   //Initial inits
   inits();
-  
+  actuate_left_vel(0);
+  actuate_right_vel(0);
 
-  //Test segmenteeeeee
-  Serial.println(F("")); 
-  Serial.println(F("")); 
-  Serial.println(F("TEST"));
- moveFor(0.15, 0.15);
- 
-  //
-
- 
-  
-  //Final inits
-  delayMillis(250);
-  Serial.println(F("START"));
 }
 
-
-
 void loop() {
+  if (Serial.available() > 0){
+    String command = read_command();
+    Serial.println(command_handler(command));
+  }
 }

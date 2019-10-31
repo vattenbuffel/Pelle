@@ -1,8 +1,9 @@
-#ifndef ENGINES.H
-#define ENGINES.H
+#ifndef ENGINES_H
+#define ENGINES_H
 
 typedef struct tEngine {
   int forwardPin, backwardPin;
+  double v_max;
 } ENGINE, *PENGINE;
 
 

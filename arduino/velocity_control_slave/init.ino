@@ -55,12 +55,14 @@ void inits(){
   //Engine init
   right_engine = {
     9,
-    10
+    10,
+    0.17*1000
   };
 
   left_engine = {
     8,
-    12
+    12,
+    0.17*1000
   };
 
 

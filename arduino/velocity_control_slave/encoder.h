@@ -1,6 +1,6 @@
 //Doesn't work with ENCODER.H. No idea why
-#ifndef BAJS.H
-#define BAJS.H
+#ifndef BAJS_H
+#define BAJS_H
 
 volatile unsigned long countLeft = 0;
 volatile unsigned long countRight = 0;
