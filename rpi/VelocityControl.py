@@ -16,13 +16,14 @@ class PID(threading.Thread):
 
         self.vs_left = []
         self.vs_right = []
-        self.ref_vs = []
+        self.ref_vs_left = []
+        self.ref_vs_right = []
         self.ts = []
         self.time_init = 0
 
-        self.kp = 0.4
+        self.kp = 0.5
         self.ki = 0.4
-        self.kd = 0.00
+        self.kd = 0.0
         self.radius = 0.025
         self.segments = 2096
         self.v_max = 207  # mm/s
@@ -65,17 +66,20 @@ class PID(threading.Thread):
             self.time_init = time.time()
 
         self.ts.append(int((t - self.time_init) * 1000))
-        self.vs_right.append(v_left)
-        self.vs_left.append(v_right)
-        self.ref_vs.append(self.vel_right)
+        self.vs_right.append(v_right)
+        self.vs_left.append(v_left)
+        self.ref_vs_right.append(self.vel_right)
+        self.ref_vs_left.append(self.vel_left)
 
         if self.vel_right == -1:
             self.actuate_vel_right(0)
             self.actuate_vel_left(0)
-            plt.plot(self.ts, self.vs_left)
-            plt.plot(self.ts, self.vs_right)
-            plt.plot(self.ts, self.ref_vs)
+            plt.plot(self.ts, self.vs_left, label='left')
+            plt.plot(self.ts, self.vs_right, label='right')
+            plt.plot(self.ts, self.ref_vs_left, label='left ref')
+            plt.plot(self.ts, self.ref_vs_right, label='right ref')
             plt.title('kp = ' + str(self.kp) + '\nki = ' + str(self.ki) + '\nkd = ' + str(self.kd))
+            plt.legend()
             plt.show()
 
             exit()
@@ -98,6 +102,7 @@ class PID(threading.Thread):
             cur_vel_left = (segments_passed / self.segments * math.pi * 2 * self.radius) / dt * 1000
             e_cur_left = self.vel_left - cur_vel_left
 
+
             P = e_cur_left * self.kp
             I_left += e_cur_left * self.ki
             D = (e_cur_left - e_old_left) / (t_cur - t_old_left) * self.kd
@@ -116,26 +121,16 @@ class PID(threading.Thread):
             e_cur_right = self.vel_right - cur_vel_right
 
             P = e_cur_right * self.kp
-            I_left += e_cur_right * self.ki
+            I_right += e_cur_right * self.ki
             D = (e_cur_right - e_old_right) / (t_cur - t_old_right) * self.kd
 
             PID_right = P + I_right + D
             self.actuate_vel_right(int(PID_right))
             t_old_right = time.time()
             e_old_right = e_cur_right
+
             self.plotter(t_cur, cur_vel_left, cur_vel_right)
 
-            time.sleep(0.001)
+            #time.sleep(0.001)
 
 
-com = communicator.Communicator("PID_COM_TEST")
-pid = PID("vel_ctrl", com)
-
-pid.start()
-
-
-for i in range(21):
-    pid.update_vel_right(random.randint(4, 22) * 10)
-    print(i, 'executed')
-    time.sleep(0.5)
-pid.update_vel_right(-1)
