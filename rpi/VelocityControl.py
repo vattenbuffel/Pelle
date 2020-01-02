@@ -1,16 +1,16 @@
 import time
 import threading
-import communicator
+from rpi import communicator
 import math
 import matplotlib.pyplot as plt
 import random
 
 
 class PID(threading.Thread):
-    def __init__(self, name, communicator):
+    def __init__(self, name, communication):
         threading.Thread.__init__(self)
         self.name = name
-        self.communicator = communicator
+        self.communicator = communication
         self.vel_left = 0
         self.vel_right = 0
 
@@ -84,8 +84,6 @@ class PID(threading.Thread):
 
             exit()
 
-
-
     def run(self):
         t_old_left = time.time()
         t_old_right = time.time()
@@ -102,7 +100,6 @@ class PID(threading.Thread):
             cur_vel_left = (segments_passed / self.segments * math.pi * 2 * self.radius) / dt * 1000
             e_cur_left = self.vel_left - cur_vel_left
 
-
             P = e_cur_left * self.kp
             I_left += e_cur_left * self.ki
             D = (e_cur_left - e_old_left) / (t_cur - t_old_left) * self.kd
@@ -111,7 +108,6 @@ class PID(threading.Thread):
             self.actuate_vel_left(int(PID_left))
             t_old_left = time.time()
             e_old_left = e_cur_left
-
 
             segments_passed = int(self.get_right_segments())
             t_cur = time.time()
@@ -131,6 +127,7 @@ class PID(threading.Thread):
 
             self.plotter(t_cur, cur_vel_left, cur_vel_right)
 
-            #time.sleep(0.001)
+            # time.sleep(0.001)
+
 
 
